@@ -1,0 +1,21 @@
+[
+  {
+    "outputFileName": "wwwroot/js/vueapp.min.js",
+    "inputFiles": [
+      "wwwroot/js/vueapp.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/site.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/scripts.min.js",
+    "inputFiles": [
+      "wwwroot/lib/vue/vue.min.js",
+      "wwwroot/lib/axios/axios.min.js"
+    ]
+  }
+]
