@@ -39,7 +39,7 @@ namespace UrlShortener.Web.Controllers.Api
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ResponseCache(Duration = 30, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new string[] { "*" })]
+        [ResponseCache(CacheProfileName = "DefaultResponseCache")]
         public async Task<ActionResult> Get(string code)
         {
             if (string.IsNullOrWhiteSpace(code))
