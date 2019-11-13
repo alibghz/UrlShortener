@@ -193,7 +193,7 @@ namespace UrlShortener.Tests
         }
 
         [Fact]
-        public async Task GetFinalLink_ReturnsUrl()
+        public async Task GetFinalLink_ReturnsUrlUsingHttpRequest()
         {
             //arrange
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -233,6 +233,32 @@ namespace UrlShortener.Tests
                 Assert.StartsWith("https://te.st/", finalLink2);
                 Assert.StartsWith("http://te.st:81/", finalLink3);
                 Assert.StartsWith("http://te.st/", finalLink4);
+            }
+        }
+
+        [Fact]
+        public async Task GetFinalLink_ReturnsUrlUsingBaseUrlOption()
+        {
+            //arrange
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                                .UseInMemoryDatabase($"Db{Guid.NewGuid()}")
+                                .Options;
+
+            using (var context = new ApplicationDbContext(options))
+            {
+                urlServiceOption.Setup(x => x.Value)
+                    .Returns(new UrlServiceOptions { CodeLength = 6, BaseUrl = "http://te.st/" });
+
+                var urlService = new UrlService(urlServiceOption.Object, logger.Object, context);
+                var request = new Mock<HttpRequest>();
+
+                //act
+                var url = "https://github.com/alibghz";
+
+                var finalLink1 = await urlService.GetFinalLink(request.Object, url);
+
+                //assert
+                Assert.StartsWith("http://te.st/", finalLink1);
             }
         }
     }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UrlShortener.Domain;
 using UrlShortener.Domain.Entities;
+using UrlShortener.Services.Extensions;
 
 namespace UrlShortener.Services
 {
@@ -86,10 +87,8 @@ namespace UrlShortener.Services
         public async Task<string> GetFinalLink(HttpRequest request, string url)
         {
             var code = await GetCodeByUrl(url);
-            var port = request.Scheme.ToLower() == "http" ? (request.Host.Port != 80 ? $":{request.Host.Port}" : "") : (request.Host.Port != 443 ? $":{request.Host.Port}" : "");
-            port = port.TrimEnd(new char[] { ':' });
-            var host = request.Host.Host.TrimEnd(new char[] { ':', '/' });
-            return $"{request.Scheme}://{host}{port}/{code}";
+            var baseUrl = string.IsNullOrWhiteSpace(options?.BaseUrl) || !IsValidUrl(options.BaseUrl) ? request.GetBaseUrl() : options.BaseUrl;
+            return $"{baseUrl.TrimEnd('/')}/{code}";
         }
     }
 }
